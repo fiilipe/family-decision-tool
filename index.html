@@ -661,6 +661,96 @@
   td.diff-up { color: #8b3a3a; font-weight: 600; }
   td.diff-zero { color: #6b5d4a; }
 
+  /* CASHFLOW CHART */
+  .cashflow-wrapper {
+    position: relative;
+    margin: 8px 0;
+  }
+  .cashflow-chart-container {
+    width: 100%;
+    overflow-x: auto;
+  }
+  .cashflow-chart-container svg {
+    width: 100%;
+    min-width: 520px;
+    height: auto;
+    display: block;
+  }
+  .cf-bar { cursor: pointer; }
+  .cf-bar:hover rect { opacity: 0.88; }
+  .cf-tooltip {
+    position: fixed;
+    background: #1a1612;
+    color: #faf6ee;
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: 0.82rem;
+    line-height: 1.5;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.12s;
+    z-index: 1000;
+    min-width: 210px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+  }
+  .cf-tooltip.visible { opacity: 1; }
+  .cf-tooltip-title {
+    font-weight: 700;
+    font-size: 0.9rem;
+    margin-bottom: 6px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(255,255,255,0.18);
+    color: #fff;
+  }
+  .cf-tooltip-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    font-variant-numeric: tabular-nums;
+    padding: 2px 0;
+  }
+  .cf-tooltip-row .lbl { color: #d4c9b3; }
+  .cf-tooltip-row.total {
+    margin-top: 6px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255,255,255,0.18);
+    font-weight: 700;
+    color: #fff;
+  }
+  .cf-tooltip-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+  .cf-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin: 14px 0 0;
+    font-size: 0.82rem;
+    color: #4a3f2e;
+  }
+  .cf-legend-item { display: flex; align-items: center; gap: 6px; }
+  .cf-legend-swatch {
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+  .cf-legend-swatch.amort {
+    background: repeating-linear-gradient(45deg, #91b095 0 4px, #b4cdb7 4px 8px);
+  }
+  .cf-legend-line {
+    width: 22px;
+    height: 0;
+    border-top: 2px dashed #2196f3;
+    flex-shrink: 0;
+  }
+
   @media (max-width: 768px) {
     .hero { grid-template-columns: 1fr; }
     .two-col { grid-template-columns: 1fr; }
@@ -978,6 +1068,30 @@
     </table>
     <div class="footer-note">
       <strong>Tänk på:</strong> Amortering är inte en "kostnad" — det är sparande som flyttar från ditt konto till lägenheten. Vid framtida försäljning får ni tillbaka detta (plus eventuell värdetillväxt).
+    </div>
+  </section>
+
+  <!-- KASSAFLÖDE 10 ÅR -->
+  <section>
+    <h2>Kassaflöde över 10 år</h2>
+    <p class="chart-intro">Grafen visar månadskostnaden för 1102 år för år, uppdelad efter komponent. Justera incitament-togglesna ovan för att se hur de påverkar de första två åren.</p>
+
+    <div class="cashflow-wrapper">
+      <div class="cashflow-chart-container">
+        <div id="cashflow-chart"></div>
+      </div>
+      <div class="cf-legend">
+        <div class="cf-legend-item"><span class="cf-legend-swatch" style="background:#8a6e4d"></span>Fast (drift+vatten+TV)</div>
+        <div class="cf-legend-item"><span class="cf-legend-swatch" style="background:#a87f4a"></span>Avgift BRF</div>
+        <div class="cf-legend-item"><span class="cf-legend-swatch" style="background:#c9a14a"></span>Parkering</div>
+        <div class="cf-legend-item"><span class="cf-legend-swatch" style="background:#c97e3a"></span>Ränta (netto)</div>
+        <div class="cf-legend-item"><span class="cf-legend-swatch amort"></span>Amortering = sparande (bygger eget kapital)</div>
+        <div class="cf-legend-item"><span class="cf-legend-line"></span>P53 idag (25 050 kr)</div>
+      </div>
+    </div>
+
+    <div class="footer-note">
+      Notera: Det gröna lagret är amortering — det är inte en kostnad utan ett sparande som flyttar till ert eget kapital i lägenheten. Den "verkliga boendekostnaden" (avgift + ränta + drift) är bara ~30 900 kr/mån från år 3, ungefär 5 800 kr mer än P53 idag.
     </div>
   </section>
 
@@ -1366,6 +1480,8 @@ const incitament = {
   lenna: true
 };
 
+let cashflowData = [];
+
 function fmt(num) {
   return new Intl.NumberFormat('sv-SE').format(Math.round(num)) + ' kr';
 }
@@ -1515,6 +1631,182 @@ function calc() {
   document.getElementById('ex-3-ranta').innerText = fmt(manads_ranta);
   document.getElementById('ex-3-amort').innerText = fmt(manads_amort_full);
   document.getElementById('ex-3-total').innerText = fmt(total_3);
+
+  renderCashflowChart();
+}
+
+function renderCashflowChart() {
+  const container = document.getElementById('cashflow-chart');
+  if (!container) return;
+
+  const pris = parseFloat(document.getElementById('koppris').value) || 0;
+  const kontant = parseFloat(document.getElementById('kontant').value) || 0;
+  const rate = parseFloat(document.getElementById('ranta').value) || 0;
+  const amortPct = parseFloat(document.getElementById('amortpct').value) || 2;
+  const lanInitial = Math.max(0, pris - kontant);
+
+  const FAST = 1978 + 796 + 249;
+  const AVGIFT_FULL = 9439;
+  const PARK_FULL = 1000;
+  const AMORT_ARS = lanInitial * (amortPct / 100);
+  const AMORT_MAN = AMORT_ARS / 12;
+
+  const years = [];
+  for (let y = 1; y <= 10; y++) {
+    let loan;
+    if (incitament.amort) {
+      loan = y <= 2 ? lanInitial : lanInitial - (y - 3) * AMORT_ARS;
+    } else {
+      loan = lanInitial - (y - 1) * AMORT_ARS;
+    }
+    loan = Math.max(0, loan);
+
+    const arsranta = loan * (rate / 100);
+    const skatteavdrag = Math.min(arsranta, 100000) * 0.30 + Math.max(arsranta - 100000, 0) * 0.21;
+    const manRanta = (arsranta - skatteavdrag) / 12;
+
+    const inIncentive = y <= 2;
+    const avgift = (inIncentive && incitament.avgift) ? 0 : AVGIFT_FULL;
+    const park   = (inIncentive && incitament.park)   ? 0 : PARK_FULL;
+    const amort  = (inIncentive && incitament.amort)  ? 0 : AMORT_MAN;
+
+    const total = FAST + avgift + park + manRanta + amort;
+    years.push({ y, fast: FAST, avgift, park, ranta: manRanta, amort, total, loan });
+  }
+  cashflowData = years;
+
+  const maxVal = Math.max.apply(null, years.map(d => d.total).concat([25050]));
+  let yMax = Math.ceil(maxVal * 1.05 / 10000) * 10000;
+  if (yMax < 50000) yMax = 50000;
+  const tickStep = yMax > 60000 ? 20000 : 10000;
+
+  const isNarrow = window.innerWidth < 560;
+
+  const W = 900, H = 460;
+  const M = { top: 20, right: 20, bottom: 60, left: 60 };
+  const cW = W - M.left - M.right;
+  const cH = H - M.top - M.bottom;
+  const x0 = M.left;
+  const yBase = M.top + cH;
+  const slotW = cW / 10;
+  const barW = slotW * 0.62;
+  const barOff = (slotW - barW) / 2;
+  const yScale = v => yBase - (v / yMax) * cH;
+
+  let svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Kassaflöde över 10 år för lägenhet 1102">';
+  svg += '<defs><pattern id="cf-amort-hatch" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(45)"><rect width="7" height="7" fill="#91b095"/><line x1="0" y1="0" x2="0" y2="7" stroke="#b4cdb7" stroke-width="2.5"/></pattern></defs>';
+
+  for (let v = 0; v <= yMax; v += tickStep) {
+    const yy = yScale(v);
+    const dash = v === 0 ? '' : 'stroke-dasharray="3 3"';
+    svg += '<line x1="' + x0 + '" y1="' + yy + '" x2="' + (x0 + cW) + '" y2="' + yy + '" stroke="#e6dcc7" stroke-width="1" ' + dash + '/>';
+    svg += '<text x="' + (x0 - 8) + '" y="' + (yy + 4) + '" text-anchor="end" font-family="Helvetica Neue, Arial, sans-serif" font-size="11" fill="#8a7d65">' + Math.round(v/1000) + 'k</text>';
+  }
+
+  const refY = yScale(25050);
+  svg += '<line x1="' + x0 + '" y1="' + refY + '" x2="' + (x0 + cW) + '" y2="' + refY + '" stroke="#2196f3" stroke-dasharray="5 4" stroke-width="2"/>';
+  svg += '<text x="' + (x0 + cW - 6) + '" y="' + (refY - 6) + '" text-anchor="end" font-family="Helvetica Neue, Arial, sans-serif" font-size="11" fill="#2196f3" font-weight="600">P53 idag: 25 050 kr</text>';
+
+  years.forEach((d, i) => {
+    const bx = x0 + i * slotW + barOff;
+    let yCur = yBase;
+    const segs = [
+      { val: d.fast,   fill: '#8a6e4d' },
+      { val: d.avgift, fill: '#a87f4a' },
+      { val: d.park,   fill: '#c9a14a' },
+      { val: d.ranta,  fill: '#c97e3a' },
+      { val: d.amort,  fill: 'url(#cf-amort-hatch)' }
+    ];
+    svg += '<g class="cf-bar" data-year="' + d.y + '">';
+    segs.forEach(seg => {
+      if (seg.val <= 0) return;
+      const h = (seg.val / yMax) * cH;
+      yCur -= h;
+      svg += '<rect x="' + bx + '" y="' + yCur + '" width="' + barW + '" height="' + h + '" fill="' + seg.fill + '"/>';
+    });
+    const lbl = isNarrow ? ('Y' + d.y) : ('År ' + d.y);
+    const weight = d.y <= 2 ? 600 : 400;
+    svg += '<text x="' + (bx + barW/2) + '" y="' + (yBase + 20) + '" text-anchor="middle" font-family="Helvetica Neue, Arial, sans-serif" font-size="11" fill="#4a3f2e" font-weight="' + weight + '">' + lbl + '</text>';
+    svg += '</g>';
+  });
+
+  svg += '<line x1="' + x0 + '" y1="' + yBase + '" x2="' + (x0 + cW) + '" y2="' + yBase + '" stroke="#c9b88f" stroke-width="1"/>';
+  svg += '<text x="14" y="' + (M.top + cH/2) + '" text-anchor="middle" transform="rotate(-90 14 ' + (M.top + cH/2) + ')" font-family="Helvetica Neue, Arial, sans-serif" font-size="11" fill="#6b5d4a">kr per månad</text>';
+  svg += '</svg>';
+
+  container.innerHTML = svg;
+}
+
+function buildCfTooltipHTML(d) {
+  const row = (color, label, val) =>
+    '<div class="cf-tooltip-row"><span class="lbl"><span class="cf-tooltip-dot" style="background:' + color + '"></span>' + label + '</span><span>' + fmt(val) + '</span></div>';
+  let html = '<div class="cf-tooltip-title">År ' + d.y + '</div>';
+  html += row('#8a6e4d', 'Fast', d.fast);
+  if (d.avgift > 0) html += row('#a87f4a', 'Avgift BRF', d.avgift);
+  if (d.park > 0)   html += row('#c9a14a', 'Parkering', d.park);
+  html += row('#c97e3a', 'Ränta (netto)', d.ranta);
+  if (d.amort > 0)  html += row('#91b095', 'Amortering', d.amort);
+  html += '<div class="cf-tooltip-row total"><span>Totalt</span><span>' + fmt(d.total) + '</span></div>';
+  return html;
+}
+
+function positionCfTooltip(clientX, clientY, tip) {
+  const tipW = tip.offsetWidth;
+  const tipH = tip.offsetHeight;
+  const pad = 12;
+  let left = clientX + pad;
+  let top = clientY - tipH - pad;
+  if (left + tipW > window.innerWidth - 8) left = clientX - tipW - pad;
+  if (top < 8) top = clientY + pad;
+  if (left < 8) left = 8;
+  tip.style.left = left + 'px';
+  tip.style.top = top + 'px';
+}
+
+function setupCashflowInteractions() {
+  const wrapper = document.querySelector('.cashflow-wrapper');
+  if (!wrapper || wrapper.dataset.cfBound) return;
+  wrapper.dataset.cfBound = 'true';
+
+  let tip = document.querySelector('.cf-tooltip');
+  if (!tip) {
+    tip = document.createElement('div');
+    tip.className = 'cf-tooltip';
+    document.body.appendChild(tip);
+  }
+  const hide = () => tip.classList.remove('visible');
+  const showFor = (year, clientX, clientY) => {
+    const d = cashflowData[year - 1];
+    if (!d) return;
+    tip.innerHTML = buildCfTooltipHTML(d);
+    tip.classList.add('visible');
+    positionCfTooltip(clientX, clientY, tip);
+  };
+
+  wrapper.addEventListener('mousemove', (e) => {
+    const bar = e.target.closest('.cf-bar');
+    if (!bar) { hide(); return; }
+    showFor(parseInt(bar.dataset.year, 10), e.clientX, e.clientY);
+  });
+  wrapper.addEventListener('mouseleave', hide);
+
+  wrapper.addEventListener('touchstart', (e) => {
+    const bar = e.target.closest('.cf-bar');
+    if (!bar) return;
+    e.preventDefault();
+    const t = e.touches[0];
+    showFor(parseInt(bar.dataset.year, 10), t.clientX, t.clientY);
+  }, { passive: false });
+
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.cf-bar')) hide();
+  });
+
+  let rTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(rTimer);
+    rTimer = setTimeout(renderCashflowChart, 200);
+  });
 }
 
 // Synka P53-slider och input
@@ -1537,6 +1829,7 @@ document.querySelectorAll('input').forEach(input => {
 });
 
 calc();
+setupCashflowInteractions();
 </script>
 
 </body>
