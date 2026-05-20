@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vinkelhuset 1102 – Kostnadsöversikt</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background: #f5f1ea;
+    color: #2c2620;
+    line-height: 1.5;
+    padding: 0;
+  }
+  .container { max-width: 1100px; margin: 0 auto; padding: 32px 24px 60px; }
+  header {
+    text-align: center;
+    padding: 40px 24px 24px;
+    background: linear-gradient(180deg, #ebe3d5 0%, #f5f1ea 100%);
+    border-bottom: 1px solid #d4c9b3;
+  }
+  header h1 {
+    font-family: 'Georgia', serif;
+    font-size: 2.2rem;
+    font-weight: 400;
+    letter-spacing: -0.5px;
+    margin-bottom: 6px;
+    color: #1a1612;
+  }
+  header .subtitle {
+    font-size: 0.95rem;
+    color: #6b5d4a;
+    margin-bottom: 8px;
+  }
+  header .meta {
+    font-size: 0.8rem;
+    color: #8a7d65;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  /* HERO SUMMARY */
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+    margin-top: 32px;
+  }
+  .hero-card {
+    padding: 28px 24px;
+    border-radius: 6px;
+    text-align: center;
+    position: relative;
+  }
+  .hero-card.nu {
+    background: #ebe3d5;
+    border: 1px solid #c9b88f;
+  }
+  .hero-card.flytt {
+    background: linear-gradient(135deg, #d4e5d8 0%, #c7dcce 100%);
+    border: 1px solid #91b095;
+  }
+  .hero-card.full {
+    background: linear-gradient(135deg, #f0e5c9 0%, #ead9b3 100%);
+    border: 1px solid #c9b88f;
+  }
+  .hero-card .label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #4a3f2e;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  .hero-card .value {
+    font-family: 'Georgia', serif;
+    font-size: 2.4rem;
+    color: #1a1612;
+    margin: 4px 0;
+    line-height: 1;
+  }
+  .hero-card .per-month {
+    font-size: 0.8rem;
+    color: #6b5d4a;
+    margin-top: 4px;
+  }
+  .hero-card .diff {
+    font-size: 0.95rem;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px dashed rgba(0,0,0,0.15);
+    font-weight: 600;
+  }
+  .diff-positive { color: #2d6b3a; }
+  .diff-negative { color: #8b3a3a; }
+  .diff-neutral { color: #6b5d4a; }
+
+  /* SECTIONS */
+  section {
+    margin: 32px 0;
+    padding: 24px;
+    background: #fff;
+    border: 1px solid #e6dcc7;
+    border-radius: 6px;
+  }
+  section h2 {
+    font-family: 'Georgia', serif;
+    font-size: 1.4rem;
+    font-weight: 400;
+    margin-bottom: 16px;
+    color: #1a1612;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #e6dcc7;
+  }
+
+  /* TOGGLES */
+  .toggle-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+  }
+  .toggle-card {
+    padding: 16px;
+    background: #faf6ee;
+    border: 2px solid #e6dcc7;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+  }
+  .toggle-card:hover { border-color: #c9b88f; }
+  .toggle-card.active {
+    background: #d4e5d8;
+    border-color: #2d6b3a;
+  }
+  .toggle-card .header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+  .toggle-card .title {
+    font-weight: 600;
+    color: #1a1612;
+    font-size: 0.95rem;
+  }
+  .toggle-switch {
+    width: 38px;
+    height: 22px;
+    background: #c9b88f;
+    border-radius: 11px;
+    position: relative;
+    transition: background 0.2s;
+  }
+  .toggle-card.active .toggle-switch { background: #2d6b3a; }
+  .toggle-switch::after {
+    content: "";
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background: #fff;
+    border-radius: 50%;
+    top: 3px;
+    left: 3px;
+    transition: transform 0.2s;
+  }
+  .toggle-card.active .toggle-switch::after { transform: translateX(16px); }
+  .toggle-card .desc {
+    font-size: 0.8rem;
+    color: #6b5d4a;
+  }
+  .toggle-card .savings {
+    font-size: 0.85rem;
+    color: #2d6b3a;
+    margin-top: 6px;
+    font-weight: 600;
+  }
+
+  /* INPUTS */
+  .input-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+  }
+  .input-group label {
+    display: block;
+    font-size: 0.75rem;
+    color: #6b5d4a;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+  }
+  .input-group input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #d4c9b3;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    background: #fff;
+    color: #1a1612;
+  }
+  .input-group input:focus {
+    outline: none;
+    border-color: #8a7d65;
+  }
+  .input-group .hint {
+    font-size: 0.7rem;
+    color: #8a7d65;
+    margin-top: 2px;
+    font-style: italic;
+  }
+
+  /* TABLE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 8px;
+  }
+  th, td {
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid #f0e8d8;
+    font-size: 0.92rem;
+  }
+  th {
+    background: #faf6ee;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #6b5d4a;
+    font-weight: 600;
+  }
+  td.amount {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    font-weight: 500;
+  }
+  td.amount.total {
+    border-top: 2px solid #c9b88f;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #1a1612;
+  }
+  tr.muted td { color: #aa9d83; }
+  tr.muted td.amount.crossed { text-decoration: line-through; }
+  .savings-badge {
+    display: inline-block;
+    background: #d4e5d8;
+    color: #2d6b3a;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-left: 8px;
+  }
+
+  /* FOOTER NOTE */
+  .footer-note {
+    background: #faf6ee;
+    padding: 14px 18px;
+    border-radius: 4px;
+    margin-top: 16px;
+    font-size: 0.85rem;
+    color: #4a3f2e;
+    border-left: 3px solid #c9b88f;
+  }
+
+  /* GRID 2 COL */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  /* EXPLAIN HERO */
+  .explain-toggle {
+    margin-top: 16px;
+    text-align: center;
+  }
+  .explain-button {
+    background: transparent;
+    border: 1px solid #c9b88f;
+    color: #4a3f2e;
+    padding: 8px 18px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+  .explain-button:hover {
+    background: #faf6ee;
+    border-color: #8a7d65;
+  }
+  .explain-button .arrow { display: inline-block; transition: transform 0.2s; margin-right: 4px; }
+  .explain-button.open .arrow { transform: rotate(90deg); }
+  .explain-panel {
+    display: none;
+    margin-top: 16px;
+    background: #fff;
+    border: 1px solid #e6dcc7;
+    border-radius: 6px;
+    padding: 20px;
+  }
+  .explain-panel.open { display: block; }
+  .explain-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+  }
+  .explain-col {
+    padding: 16px;
+    border-radius: 4px;
+  }
+  .explain-col.nu { background: #f5efe3; border-left: 3px solid #c9b88f; }
+  .explain-col.flytt { background: #ecf3ee; border-left: 3px solid #91b095; }
+  .explain-col.full { background: #f7eed5; border-left: 3px solid #c9b88f; }
+  .explain-col h4 {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #4a3f2e;
+    margin-bottom: 12px;
+    font-weight: 700;
+  }
+  .explain-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    font-size: 0.85rem;
+    border-bottom: 1px dashed #d4c9b3;
+  }
+  .explain-row.zero { color: #2d6b3a; font-weight: 600; }
+  .explain-row.total {
+    border-top: 2px solid #8a7d65;
+    border-bottom: none;
+    margin-top: 8px;
+    padding-top: 8px;
+    font-weight: 700;
+    color: #1a1612;
+  }
+  .explain-row .item { color: #4a3f2e; }
+  .explain-row .val { font-variant-numeric: tabular-nums; font-weight: 600; }
+  .explain-note {
+    font-size: 0.75rem;
+    color: #6b5d4a;
+    font-style: italic;
+    margin-top: 8px;
+    padding: 6px 8px;
+    background: rgba(255,255,255,0.5);
+    border-radius: 3px;
+  }
+  @media (max-width: 768px) {
+    .explain-grid { grid-template-columns: 1fr; }
+  }
+
+  /* P53 SLIDER CONTROL */
+  .p53-control {
+    background: #faf6ee;
+    padding: 16px;
+    border-radius: 6px;
+    margin-bottom: 16px;
+    border: 1px solid #e6dcc7;
+  }
+  .p53-control-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    gap: 12px;
+  }
+  .p53-control label {
+    font-size: 0.85rem;
+    color: #4a3f2e;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .p53-control input[type="number"] {
+    width: 140px;
+    padding: 8px 10px;
+    border: 1px solid #c9b88f;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: 700;
+    text-align: right;
+    color: #1a1612;
+    background: #fff;
+    font-variant-numeric: tabular-nums;
+  }
+  .p53-control input[type="number"]:focus {
+    outline: none;
+    border-color: #2d6b3a;
+  }
+  .p53-control input[type="range"] {
+    width: 100%;
+    height: 6px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: linear-gradient(90deg, #f5d8d8 0%, #f5d8d8 25%, #f0e5c9 35%, #d4e5d8 55%, #d4e5d8 100%);
+    border-radius: 3px;
+    outline: none;
+    margin: 12px 0 8px;
+  }
+  .p53-control input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #1a1612;
+    border: 3px solid #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    cursor: pointer;
+  }
+  .p53-control input[type="range"]::-moz-range-thumb {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #1a1612;
+    border: 3px solid #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    cursor: pointer;
+    border: none;
+  }
+  .p53-marks {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.7rem;
+    color: #8a7d65;
+    text-align: center;
+    margin-top: 4px;
+  }
+  .p53-marks span { flex: 1; }
+  .p53-marks em { font-style: italic; font-size: 0.65rem; }
+
+  @media (max-width: 768px) {
+    .hero { grid-template-columns: 1fr; }
+    .two-col { grid-template-columns: 1fr; }
+    header h1 { font-size: 1.6rem; }
+    .hero-card .value { font-size: 2rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Vinkelhuset Lgh 1102</h1>
+  <p class="subtitle">Primusgatan 6 · 166 kvm · 5 rok</p>
+  <p class="meta">Kostnadsöversikt</p>
+</header>
+
+<div class="container">
+
+  <!-- HERO: Tre stora siffror -->
+  <div class="hero">
+    <div class="hero-card nu">
+      <div class="label">Idag (P53)</div>
+      <div class="value" id="hero-nu">25 050 kr</div>
+      <div class="per-month">per månad netto</div>
+      <div class="diff diff-neutral">Vår nuvarande nivå</div>
+    </div>
+    <div class="hero-card flytt">
+      <div class="label">1102 år 1–2</div>
+      <div class="value" id="hero-12">— kr</div>
+      <div class="per-month">per månad netto</div>
+      <div class="diff" id="hero-12-diff">—</div>
+    </div>
+    <div class="hero-card full">
+      <div class="label">1102 år 3+</div>
+      <div class="value" id="hero-3plus">— kr</div>
+      <div class="per-month">per månad netto</div>
+      <div class="diff" id="hero-3plus-diff">—</div>
+    </div>
+  </div>
+
+  <!-- EXPLAIN PANEL -->
+  <div class="explain-toggle">
+    <button class="explain-button" id="explain-btn" onclick="toggleExplain()">
+      <span class="arrow">▶</span> Vad ingår i siffrorna?
+    </button>
+  </div>
+
+  <div class="explain-panel" id="explain-panel">
+    <div class="explain-grid">
+
+      <!-- NU -->
+      <div class="explain-col nu">
+        <h4>Idag (P53)</h4>
+        <div class="explain-row"><span class="item">Avgift BRF</span><span class="val">5 546 kr</span></div>
+        <div class="explain-row"><span class="item">Bolåneränta (netto)</span><span class="val" id="ex-nu-ranta">~9 030 kr</span></div>
+        <div class="explain-row"><span class="item">Amortering</span><span class="val">9 521 kr</span></div>
+        <div class="explain-row"><span class="item">Drift/övrigt</span><span class="val">~953 kr</span></div>
+        <div class="explain-row total"><span class="item">Total netto</span><span class="val" id="ex-nu-total">25 050 kr</span></div>
+        <div class="explain-note">Bolån 5,36 MSEK @ 2,77 % rörlig. Amorteringen är hög p.g.a. LTV >70 %.</div>
+      </div>
+
+      <!-- 1102 år 1–2 -->
+      <div class="explain-col flytt">
+        <h4>1102 år 1–2</h4>
+        <div class="explain-row" id="ex-12-avgift"><span class="item">Avgift BRF</span><span class="val">— kr</span></div>
+        <div class="explain-row"><span class="item">Driftkostnad</span><span class="val">1 978 kr</span></div>
+        <div class="explain-row"><span class="item">Varmvatten</span><span class="val">796 kr</span></div>
+        <div class="explain-row"><span class="item">Bredband/TV</span><span class="val">249 kr</span></div>
+        <div class="explain-row" id="ex-12-park"><span class="item">Parkering</span><span class="val">— kr</span></div>
+        <div class="explain-row"><span class="item">Bolåneränta (netto)</span><span class="val" id="ex-12-ranta">— kr</span></div>
+        <div class="explain-row" id="ex-12-amort"><span class="item">Amortering</span><span class="val">— kr</span></div>
+        <div class="explain-row total"><span class="item">Total netto</span><span class="val" id="ex-12-total">— kr</span></div>
+        <div class="explain-note">Med Patriams incitament (vad som är aktivt ovan). 100k Lenna möbler är engångsvärde — inte i månadskostnaden.</div>
+      </div>
+
+      <!-- 1102 år 3+ -->
+      <div class="explain-col full">
+        <h4>1102 år 3+</h4>
+        <div class="explain-row"><span class="item">Avgift BRF</span><span class="val">9 439 kr</span></div>
+        <div class="explain-row"><span class="item">Driftkostnad</span><span class="val">1 978 kr</span></div>
+        <div class="explain-row"><span class="item">Varmvatten</span><span class="val">796 kr</span></div>
+        <div class="explain-row"><span class="item">Bredband/TV</span><span class="val">249 kr</span></div>
+        <div class="explain-row"><span class="item">Parkering</span><span class="val">1 000 kr</span></div>
+        <div class="explain-row"><span class="item">Bolåneränta (netto)</span><span class="val" id="ex-3-ranta">— kr</span></div>
+        <div class="explain-row"><span class="item">Amortering 2 %</span><span class="val" id="ex-3-amort">— kr</span></div>
+        <div class="explain-row total"><span class="item">Total netto</span><span class="val" id="ex-3-total">— kr</span></div>
+        <div class="explain-note">Full månadskostnad efter att incitamenten löper ut. Amortering är sparande, inte förlust — bygger eget kapital i lägenheten.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- TOGGLES -->
+  <section>
+    <h2>Incitament från Patriam – välj vad som ingår</h2>
+    <div class="toggle-container">
+      <div class="toggle-card active" id="t-avgift" onclick="toggle('avgift')">
+        <div class="header-row">
+          <div class="title">Avgiftsfritt 24 mån</div>
+          <div class="toggle-switch"></div>
+        </div>
+        <div class="desc">Patriam betalar månadsavgiften till BRF</div>
+        <div class="savings">Värde: ~227 000 kr</div>
+      </div>
+      <div class="toggle-card active" id="t-amort" onclick="toggle('amort')">
+        <div class="header-row">
+          <div class="title">Amorteringsfritt 24 mån</div>
+          <div class="toggle-switch"></div>
+        </div>
+        <div class="desc">Kräver bankens godkännande (FI-undantag för nyproduktion)</div>
+        <div class="savings">Kassaflöde: ~400 000 kr</div>
+      </div>
+      <div class="toggle-card active" id="t-park" onclick="toggle('park')">
+        <div class="header-row">
+          <div class="title">Gratis parkering 24 mån</div>
+          <div class="toggle-switch"></div>
+        </div>
+        <div class="desc">Garage i närliggande fastighet</div>
+        <div class="savings">Värde: ~24 000 kr</div>
+      </div>
+      <div class="toggle-card active" id="t-lenna" onclick="toggle('lenna')">
+        <div class="header-row">
+          <div class="title">100k Lenna möbler</div>
+          <div class="toggle-switch"></div>
+        </div>
+        <div class="desc">Möbelpaket eller värdecheck</div>
+        <div class="savings">Värde: 100 000 kr</div>
+      </div>
+    </div>
+    <div class="footer-note" id="paket-summary">
+      Totalt paketvärde första 2 åren: <strong>~751 000 kr</strong>
+    </div>
+  </section>
+
+  <!-- INPUTS -->
+  <section>
+    <h2>Antaganden</h2>
+    <div class="input-grid">
+      <div class="input-group">
+        <label for="koppris">Köpeskilling</label>
+        <input type="number" id="koppris" value="12500000" step="100000">
+        <div class="hint">Vårt bud</div>
+      </div>
+      <div class="input-group">
+        <label for="kontant">Kontantinsats (kr)</label>
+        <input type="number" id="kontant" value="2500000" step="100000">
+        <div class="hint">Från P53-försäljning</div>
+      </div>
+      <div class="input-group">
+        <label for="ranta">Ränta (%)</label>
+        <input type="number" id="ranta" value="2.77" step="0.01">
+        <div class="hint">Snittränta rörlig</div>
+      </div>
+      <div class="input-group">
+        <label for="amortpct">Amortering år 3+ (%)</label>
+        <input type="number" id="amortpct" value="2" step="0.5">
+        <div class="hint">Lagkrav LTV >70 %</div>
+      </div>
+      <div class="input-group">
+        <label for="nuvarande">Nuvarande netto (kr/mån)</label>
+        <input type="number" id="nuvarande" value="25050" step="500">
+        <div class="hint">P53 efter skatteavdrag</div>
+      </div>
+    </div>
+    <div class="footer-note">
+      <strong>Försäljningspris för P53</strong> justeras längre ner i avsnittet "P53-försäljning" där effekten visas direkt på bufferten.
+    </div>
+  </section>
+
+  <!-- DETAILED COSTS -->
+  <section>
+    <h2>Månadskostnad – specifikation</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Kostnadspost</th>
+          <th style="text-align: right;">År 1–2</th>
+          <th style="text-align: right;">År 3+</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr id="row-avgift">
+          <td>Månadsavgift BRF</td>
+          <td class="amount" id="rad-avgift-12">— kr</td>
+          <td class="amount" id="rad-avgift-3">9 439 kr</td>
+        </tr>
+        <tr>
+          <td>Driftkostnad</td>
+          <td class="amount">1 978 kr</td>
+          <td class="amount">1 978 kr</td>
+        </tr>
+        <tr>
+          <td>Varmvatten</td>
+          <td class="amount">796 kr</td>
+          <td class="amount">796 kr</td>
+        </tr>
+        <tr>
+          <td>Bredband/TV</td>
+          <td class="amount">249 kr</td>
+          <td class="amount">249 kr</td>
+        </tr>
+        <tr id="row-park">
+          <td>Parkering</td>
+          <td class="amount" id="rad-park-12">— kr</td>
+          <td class="amount">1 000 kr</td>
+        </tr>
+        <tr>
+          <td>Bolåneränta (efter skatteavdrag)</td>
+          <td class="amount" id="rad-ranta-12">— kr</td>
+          <td class="amount" id="rad-ranta-3">— kr</td>
+        </tr>
+        <tr id="row-amort">
+          <td>Amortering</td>
+          <td class="amount" id="rad-amort-12">— kr</td>
+          <td class="amount" id="rad-amort-3">— kr</td>
+        </tr>
+        <tr><td colspan="3" style="padding: 6px;"></td></tr>
+        <tr>
+          <td><strong>Totalt per månad</strong></td>
+          <td class="amount total" id="total-12">— kr</td>
+          <td class="amount total" id="total-3">— kr</td>
+        </tr>
+        <tr>
+          <td><strong>Skillnad mot idag</strong></td>
+          <td class="amount" id="diff-12">—</td>
+          <td class="amount" id="diff-3">—</td>
+        </tr>
+        <tr>
+          <td><em>Varav "kostnad" (exkl. amortering)</em></td>
+          <td class="amount" id="rent-cost-12">—</td>
+          <td class="amount" id="rent-cost-3">—</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="footer-note">
+      <strong>Tänk på:</strong> Amortering är inte en "kostnad" — det är sparande som flyttar från ditt konto till lägenheten. Vid framtida försäljning får ni tillbaka detta (plus eventuell värdetillväxt).
+    </div>
+  </section>
+
+  <!-- ENGÅNGSKOSTNADER & P53 -->
+  <div class="two-col">
+
+    <section>
+      <h2>Engångskostnader vid tillträde</h2>
+      <table>
+        <tbody>
+          <tr>
+            <td>Kontantinsats</td>
+            <td class="amount" id="ek-kontant">— kr</td>
+          </tr>
+          <tr>
+            <td>Pantsättningsavgift till BRF</td>
+            <td class="amount">~600 kr</td>
+          </tr>
+          <tr>
+            <td>Medlemsavgift BRF</td>
+            <td class="amount">~1 000 kr</td>
+          </tr>
+          <tr>
+            <td>Uppläggningsavgift bolån</td>
+            <td class="amount">~0–2 500 kr</td>
+          </tr>
+          <tr>
+            <td>Flyttkostnader (uppskattning)</td>
+            <td class="amount">20 000 kr</td>
+          </tr>
+          <tr>
+            <td><strong>Totalt vid tillträde</strong></td>
+            <td class="amount total" id="ek-total">— kr</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="footer-note">
+        Bostadsrätt har <strong>inga</strong> stämpelskatter, lagfartskostnader eller pantbrevsavgifter — det är en av de stora ekonomiska fördelarna jämfört med småhusköp.
+      </div>
+    </section>
+
+    <section>
+      <h2>P53-försäljning</h2>
+
+      <div class="p53-control">
+        <div class="p53-control-row">
+          <label for="forsaljning-slider">Försäljningspris P53</label>
+          <input type="number" id="forsaljning-input" value="9200000" step="50000" min="7000000" max="10500000">
+        </div>
+        <input type="range" id="forsaljning-slider" min="7000000" max="10500000" step="50000" value="9200000">
+        <div class="p53-marks">
+          <span>7,0 MSEK</span>
+          <span style="color: #8b3a3a;">8,0 MSEK<br><em>nöjd-nivå</em></span>
+          <span style="color: #2d6b3a;">9,2 MSEK<br><em>central</em></span>
+          <span>10,5 MSEK</span>
+        </div>
+      </div>
+
+      <table>
+        <tbody>
+          <tr>
+            <td>Försäljningspris</td>
+            <td class="amount" id="p53-pris">— kr</td>
+          </tr>
+          <tr>
+            <td>− Lån att lösa</td>
+            <td class="amount">−5 362 738 kr</td>
+          </tr>
+          <tr>
+            <td>− Mäklararvode (~2 %)</td>
+            <td class="amount" id="p53-maklare">— kr</td>
+          </tr>
+          <tr>
+            <td><strong>Eget kapital efter försäljning</strong></td>
+            <td class="amount total" id="p53-netto">— kr</td>
+          </tr>
+          <tr>
+            <td>− Kontantinsats 1102</td>
+            <td class="amount" id="p53-mot-kontant">— kr</td>
+          </tr>
+          <tr>
+            <td><strong>Buffert kvar</strong></td>
+            <td class="amount total" id="p53-buffert">— kr</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="footer-note">
+        <strong>Reavinst ~2,4 MSEK</strong> kan skjutas upp helt (räntefritt uppskov sedan 2021). Slipper betala 528 000 kr skatt direkt.
+      </div>
+    </section>
+
+  </div>
+
+  <!-- KAPITAL OVER TID -->
+  <section>
+    <h2>Eget kapital över tid</h2>
+    <table>
+      <tbody>
+        <tr>
+          <td>Initial kontantinsats</td>
+          <td class="amount" id="kapital-initial">— kr</td>
+        </tr>
+        <tr>
+          <td>+ Amortering år 3–10 (8 år)</td>
+          <td class="amount" id="kapital-amort">— kr</td>
+        </tr>
+        <tr>
+          <td><strong>Eget kapital efter 10 år (exkl. värdetillväxt)</strong></td>
+          <td class="amount total" id="kapital-total">— kr</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="footer-note">
+      Vid 2 % årlig värdetillväxt: lägenhetens marknadsvärde efter 10 år ~15,2 MSEK. Vid 4 %: ~18,5 MSEK. Vid stillaståend marknad: 12,5 MSEK.
+    </div>
+  </section>
+
+</div>
+
+<script>
+const incitament = {
+  avgift: true,
+  amort: true,
+  park: true,
+  lenna: true
+};
+
+function fmt(num) {
+  return new Intl.NumberFormat('sv-SE').format(Math.round(num)) + ' kr';
+}
+function fmtDiff(num) {
+  const sign = num > 0 ? '+' : '';
+  const cls = num > 0 ? 'diff-negative' : (num < 0 ? 'diff-positive' : 'diff-neutral');
+  return `<span class="${cls}">${sign}${fmt(num)}/mån</span>`;
+}
+
+function toggle(key) {
+  incitament[key] = !incitament[key];
+  document.getElementById('t-' + key).classList.toggle('active');
+  calc();
+}
+
+function toggleExplain() {
+  document.getElementById('explain-panel').classList.toggle('open');
+  document.getElementById('explain-btn').classList.toggle('open');
+}
+
+function calc() {
+  const pris = parseFloat(document.getElementById('koppris').value) || 0;
+  const kontant = parseFloat(document.getElementById('kontant').value) || 0;
+  const ranta = parseFloat(document.getElementById('ranta').value) || 0;
+  const amortPct = parseFloat(document.getElementById('amortpct').value) || 0;
+  const nuvarande = parseFloat(document.getElementById('nuvarande').value) || 0;
+  const forsaljning = parseFloat(document.getElementById('forsaljning-input').value) || 0;
+
+  const lan = pris - kontant;
+
+  // Räntor (med skatteavdrag)
+  const arsranta = lan * (ranta / 100);
+  const skatteavdrag = Math.min(arsranta, 100000) * 0.30 + Math.max(arsranta - 100000, 0) * 0.21;
+  const arsranta_netto = arsranta - skatteavdrag;
+  const manads_ranta = arsranta_netto / 12;
+
+  // Amortering år 3+
+  const arsamort = lan * (amortPct / 100);
+  const manads_amort_full = arsamort / 12;
+  // Amortering år 1-2 (beror på toggle)
+  const manads_amort_12 = incitament.amort ? 0 : manads_amort_full;
+
+  // BRF-kostnader
+  const drift = 1978;
+  const varmvatten = 796;
+  const bredband = 249;
+  const avgift_full = 9439;
+  const avgift_12 = incitament.avgift ? 0 : avgift_full;
+  const parkering_full = 1000;
+  const parkering_12 = incitament.park ? 0 : parkering_full;
+
+  // Total per månad
+  const total_12 = avgift_12 + drift + varmvatten + bredband + parkering_12 + manads_ranta + manads_amort_12;
+  const total_3 = avgift_full + drift + varmvatten + bredband + parkering_full + manads_ranta + manads_amort_full;
+
+  // Update hero
+  document.getElementById('hero-nu').innerText = fmt(nuvarande);
+  document.getElementById('hero-12').innerText = fmt(total_12);
+  document.getElementById('hero-3plus').innerText = fmt(total_3);
+  document.getElementById('hero-12-diff').innerHTML = fmtDiff(total_12 - nuvarande);
+  document.getElementById('hero-3plus-diff').innerHTML = fmtDiff(total_3 - nuvarande);
+
+  // Update detailed table
+  document.getElementById('rad-avgift-12').innerHTML = incitament.avgift
+    ? '<span style="color: #2d6b3a;">0 kr</span> <span class="savings-badge">−9 439</span>'
+    : '9 439 kr';
+  document.getElementById('rad-park-12').innerHTML = incitament.park
+    ? '<span style="color: #2d6b3a;">0 kr</span> <span class="savings-badge">−1 000</span>'
+    : '1 000 kr';
+  document.getElementById('rad-amort-12').innerHTML = incitament.amort
+    ? '<span style="color: #2d6b3a;">0 kr</span> <span class="savings-badge">amorteringsfritt</span>'
+    : fmt(manads_amort_full);
+  document.getElementById('rad-amort-3').innerText = fmt(manads_amort_full);
+  document.getElementById('rad-ranta-12').innerText = fmt(manads_ranta);
+  document.getElementById('rad-ranta-3').innerText = fmt(manads_ranta);
+
+  document.getElementById('total-12').innerText = fmt(total_12);
+  document.getElementById('total-3').innerText = fmt(total_3);
+  document.getElementById('diff-12').innerHTML = fmtDiff(total_12 - nuvarande);
+  document.getElementById('diff-3').innerHTML = fmtDiff(total_3 - nuvarande);
+
+  // "Rent cost" without amortization
+  const rent_12 = total_12 - manads_amort_12;
+  const rent_3 = total_3 - manads_amort_full;
+  document.getElementById('rent-cost-12').innerText = fmt(rent_12);
+  document.getElementById('rent-cost-3').innerText = fmt(rent_3);
+
+  // Engångskostnader (bostadsrätt = inga stämpelskatter eller pantbrev)
+  const ek_total = kontant + 600 + 1000 + 2500 + 20000;
+  document.getElementById('ek-kontant').innerText = fmt(kontant);
+  document.getElementById('ek-total').innerText = fmt(ek_total);
+
+  // P53
+  const maklare = forsaljning * 0.02;
+  const p53_netto = forsaljning - 5362738 - maklare;
+  const p53_buffert = p53_netto - kontant;
+  document.getElementById('p53-pris').innerText = fmt(forsaljning);
+  document.getElementById('p53-maklare').innerText = '−' + fmt(maklare);
+  document.getElementById('p53-netto').innerText = fmt(p53_netto);
+  document.getElementById('p53-mot-kontant').innerText = '−' + fmt(kontant);
+  const buffertEl = document.getElementById('p53-buffert');
+  buffertEl.innerText = fmt(p53_buffert);
+  buffertEl.style.color = p53_buffert < 200000 ? '#8b3a3a' : '#2d6b3a';
+
+  // Kapital
+  document.getElementById('kapital-initial').innerText = fmt(kontant);
+  document.getElementById('kapital-amort').innerText = fmt(arsamort * 8);
+  document.getElementById('kapital-total').innerText = fmt(kontant + arsamort * 8);
+
+  // Paket summary
+  const paket = (incitament.avgift ? 226536 : 0)
+    + (incitament.amort ? manads_amort_full * 24 : 0)
+    + (incitament.park ? 24000 : 0)
+    + (incitament.lenna ? 100000 : 0);
+  document.getElementById('paket-summary').innerHTML =
+    'Totalt paketvärde första 2 åren: <strong>~' + fmt(paket) + '</strong>';
+
+  // Förklaringspanel
+  // År 1-2
+  const ex12Avgift = document.getElementById('ex-12-avgift');
+  if (incitament.avgift) {
+    ex12Avgift.innerHTML = '<span class="item">Avgift BRF</span><span class="val" style="color:#2d6b3a;">0 kr ✓</span>';
+    ex12Avgift.classList.add('zero');
+  } else {
+    ex12Avgift.innerHTML = '<span class="item">Avgift BRF</span><span class="val">9 439 kr</span>';
+    ex12Avgift.classList.remove('zero');
+  }
+
+  const ex12Park = document.getElementById('ex-12-park');
+  if (incitament.park) {
+    ex12Park.innerHTML = '<span class="item">Parkering</span><span class="val" style="color:#2d6b3a;">0 kr ✓</span>';
+  } else {
+    ex12Park.innerHTML = '<span class="item">Parkering</span><span class="val">1 000 kr</span>';
+  }
+
+  const ex12Amort = document.getElementById('ex-12-amort');
+  if (incitament.amort) {
+    ex12Amort.innerHTML = '<span class="item">Amortering</span><span class="val" style="color:#2d6b3a;">0 kr ✓</span>';
+  } else {
+    ex12Amort.innerHTML = '<span class="item">Amortering</span><span class="val">' + fmt(manads_amort_full) + '</span>';
+  }
+
+  document.getElementById('ex-12-ranta').innerText = fmt(manads_ranta);
+  document.getElementById('ex-12-total').innerText = fmt(total_12);
+
+  // År 3+
+  document.getElementById('ex-3-ranta').innerText = fmt(manads_ranta);
+  document.getElementById('ex-3-amort').innerText = fmt(manads_amort_full);
+  document.getElementById('ex-3-total').innerText = fmt(total_3);
+}
+
+// Synka P53-slider och input
+const p53Slider = document.getElementById('forsaljning-slider');
+const p53Input = document.getElementById('forsaljning-input');
+p53Slider.addEventListener('input', () => {
+  p53Input.value = p53Slider.value;
+  calc();
+});
+p53Input.addEventListener('input', () => {
+  p53Slider.value = p53Input.value;
+  calc();
+});
+
+// Lyssna på övriga inputs (ej P53-fälten igen)
+document.querySelectorAll('input').forEach(input => {
+  if (input.id !== 'forsaljning-slider' && input.id !== 'forsaljning-input') {
+    input.addEventListener('input', calc);
+  }
+});
+
+calc();
+</script>
+
+</body>
+</html>
