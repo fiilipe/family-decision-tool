@@ -436,6 +436,56 @@
   .p53-marks span { flex: 1; }
   .p53-marks em { font-style: italic; font-size: 0.65rem; }
 
+  /* SALES CHART */
+  .chart-intro {
+    font-size: 0.9rem;
+    color: #4a3f2e;
+    margin-bottom: 8px;
+  }
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    margin: 12px 0 18px;
+    font-size: 0.85rem;
+    color: #4a3f2e;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .legend-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+  .chart-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    margin: 8px 0 16px;
+  }
+  .chart-wrapper svg {
+    width: 100%;
+    min-width: 680px;
+    height: auto;
+    display: block;
+  }
+  .status-badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+  .status-badge.bud { background: #d6eaf8; color: #1565a0; }
+  .status-badge.sold { background: #d4e5d8; color: #2d6b3a; }
+  .status-badge.listad { background: #f0e0cf; color: #8c5621; }
+
   @media (max-width: 768px) {
     .hero { grid-template-columns: 1fr; }
     .two-col { grid-template-columns: 1fr; }
@@ -787,6 +837,208 @@
     <div class="footer-note">
       Vid 2 % årlig värdetillväxt: lägenhetens marknadsvärde efter 10 år ~15,2 MSEK. Vid 4 %: ~18,5 MSEK. Vid stillaståend marknad: 12,5 MSEK.
     </div>
+  </section>
+
+  <!-- FÖRSÄLJNINGAR I VINKELHUSET -->
+  <section>
+    <h2>Försäljningar i Vinkelhuset – kr/kvm</h2>
+    <p class="chart-intro">Grafen visar alla verifierade slutpriser, aktuella utropspriser samt vårt bud, sorterat efter kr/kvm.</p>
+
+    <div class="legend">
+      <div class="legend-item"><span class="legend-dot" style="background:#2196f3;"></span>Vårt bud</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#2d6b3a;"></span>Verifierat slutpris</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#c97e3a;"></span>Aktuellt utropspris</div>
+    </div>
+
+    <div class="chart-wrapper">
+      <svg viewBox="0 0 1000 510" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Försäljningar i Vinkelhuset, kr per kvm">
+        <text x="990" y="14" text-anchor="end" font-family="Helvetica Neue, Arial, sans-serif" font-size="10" fill="#8a7d65" font-style="italic">kr/kvm</text>
+
+        <g font-family="Helvetica Neue, Arial, sans-serif" font-size="11" fill="#8a7d65">
+          <text x="320" y="22" text-anchor="middle">70k</text>
+          <text x="420" y="22" text-anchor="middle">80k</text>
+          <text x="520" y="22" text-anchor="middle">90k</text>
+          <text x="620" y="22" text-anchor="middle">100k</text>
+          <text x="720" y="22" text-anchor="middle">110k</text>
+          <text x="820" y="22" text-anchor="middle">120k</text>
+        </g>
+
+        <g stroke="#d4c9b3" stroke-dasharray="3 3" stroke-width="1">
+          <line x1="420" y1="30" x2="420" y2="488"/>
+          <line x1="520" y1="30" x2="520" y2="488"/>
+          <line x1="620" y1="30" x2="620" y2="488"/>
+          <line x1="720" y1="30" x2="720" y2="488"/>
+          <line x1="820" y1="30" x2="820" y2="488"/>
+        </g>
+
+        <line x1="320" y1="30" x2="320" y2="488" stroke="#c9b88f" stroke-width="1"/>
+
+        <g font-family="Helvetica Neue, Arial, sans-serif" font-size="12" fill="#1a1612">
+          <text x="310" y="66" text-anchor="end" font-weight="700">1102 — Vårt bud</text>
+          <rect x="320" y="50" width="53" height="22" fill="#2196f3" rx="2"/>
+          <text x="381" y="66" font-weight="600">75 256</text>
+
+          <text x="310" y="106" text-anchor="end">1101</text>
+          <rect x="320" y="90" width="107" height="22" fill="#2d6b3a" rx="2"/>
+          <text x="435" y="106">80 696</text>
+
+          <text x="310" y="146" text-anchor="end">1001</text>
+          <rect x="320" y="130" width="161" height="22" fill="#2d6b3a" rx="2"/>
+          <text x="489" y="146">86 111</text>
+
+          <text x="310" y="186" text-anchor="end">1102 (utrop)</text>
+          <rect x="320" y="170" width="203" height="22" fill="#c97e3a" rx="2"/>
+          <text x="531" y="186">90 277</text>
+
+          <text x="310" y="226" text-anchor="end">1202 (utrop)</text>
+          <rect x="320" y="210" width="239" height="22" fill="#c97e3a" rx="2"/>
+          <text x="567" y="226">93 900</text>
+
+          <text x="310" y="266" text-anchor="end">1002</text>
+          <rect x="320" y="250" width="246" height="22" fill="#2d6b3a" rx="2"/>
+          <text x="574" y="266">94 578</text>
+
+          <text x="310" y="306" text-anchor="end">902</text>
+          <rect x="320" y="290" width="316" height="22" fill="#2d6b3a" rx="2"/>
+          <text x="644" y="306">101 597</text>
+
+          <text x="310" y="346" text-anchor="end">Okänd 166 kvm (sannolikt 1302/1402)</text>
+          <rect x="320" y="330" width="384" height="22" fill="#2d6b3a" rx="2"/>
+          <text x="712" y="346">108 404</text>
+
+          <text x="310" y="386" text-anchor="end">1401 (utrop)</text>
+          <rect x="320" y="370" width="404" height="22" fill="#c97e3a" rx="2"/>
+          <text x="732" y="386">110 443</text>
+
+          <text x="310" y="426" text-anchor="end">1501 (utrop)</text>
+          <rect x="320" y="410" width="483" height="22" fill="#c97e3a" rx="2"/>
+          <text x="811" y="426">118 261</text>
+
+          <text x="310" y="466" text-anchor="end">Okänd 166 kvm (sannolikt 1302/1402)</text>
+          <rect x="320" y="450" width="505" height="22" fill="#2d6b3a" rx="2"/>
+          <text x="833" y="466">120 452</text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="footer-note">
+      Källor: Värderingsdata för verifierade slutpriser, Booli/Widerlöv/Fjelkners för aktuella utropspriser. Två 166-kvm-lägenheter som sålts 2025-09-06 är inte officiellt kopplade till specifika lägenhetsnummer — sannolikt 1302 och 1402 baserat på storlek och pris.
+    </div>
+
+    <table style="margin-top: 16px;">
+      <thead>
+        <tr>
+          <th>Lägenhet</th>
+          <th>Plan</th>
+          <th>Storlek</th>
+          <th>Status</th>
+          <th>Datum</th>
+          <th style="text-align: right;">Pris (tkr)</th>
+          <th style="text-align: right;">kr/kvm</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>1102 — Vårt bud</strong></td>
+          <td>11</td>
+          <td>166 m²</td>
+          <td><span class="status-badge bud">Bud</span></td>
+          <td>—</td>
+          <td class="amount">12 500</td>
+          <td class="amount">75 256</td>
+        </tr>
+        <tr>
+          <td>1101</td>
+          <td>11</td>
+          <td>158 m²</td>
+          <td><span class="status-badge sold">Såld</span></td>
+          <td>2025-09-25</td>
+          <td class="amount">12 750</td>
+          <td class="amount">80 696</td>
+        </tr>
+        <tr>
+          <td>1001</td>
+          <td>10</td>
+          <td>63 m²</td>
+          <td><span class="status-badge sold">Såld</span></td>
+          <td>2026-02-17</td>
+          <td class="amount">5 425</td>
+          <td class="amount">86 111</td>
+        </tr>
+        <tr>
+          <td>1102 (utrop)</td>
+          <td>11</td>
+          <td>166 m²</td>
+          <td><span class="status-badge listad">Listad</span></td>
+          <td>aktuell</td>
+          <td class="amount">14 995</td>
+          <td class="amount">90 277</td>
+        </tr>
+        <tr>
+          <td>1202 (utrop)</td>
+          <td>12</td>
+          <td>166 m²</td>
+          <td><span class="status-badge listad">Listad</span></td>
+          <td>aktuell</td>
+          <td class="amount">15 595</td>
+          <td class="amount">93 900</td>
+        </tr>
+        <tr>
+          <td>1002</td>
+          <td>10</td>
+          <td>166 m²</td>
+          <td><span class="status-badge sold">Såld</span></td>
+          <td>2025-08-30</td>
+          <td class="amount">15 700</td>
+          <td class="amount">94 578</td>
+        </tr>
+        <tr>
+          <td>902</td>
+          <td>09</td>
+          <td>72 m²</td>
+          <td><span class="status-badge sold">Såld</span></td>
+          <td>2025-07-22</td>
+          <td class="amount">7 315</td>
+          <td class="amount">101 597</td>
+        </tr>
+        <tr>
+          <td>Okänd 166 kvm (sannolikt 1302/1402)</td>
+          <td>~13–14</td>
+          <td>166 m²</td>
+          <td><span class="status-badge sold">Såld</span></td>
+          <td>2025-09-06</td>
+          <td class="amount">17 995</td>
+          <td class="amount">108 404</td>
+        </tr>
+        <tr>
+          <td>1401 (utrop)</td>
+          <td>14</td>
+          <td>158 m²</td>
+          <td><span class="status-badge listad">Listad</span></td>
+          <td>aktuell</td>
+          <td class="amount">17 450</td>
+          <td class="amount">110 443</td>
+        </tr>
+        <tr>
+          <td>1501 (utrop)</td>
+          <td>15</td>
+          <td>158 m² + terrass 28</td>
+          <td><span class="status-badge listad">Listad</span></td>
+          <td>aktuell</td>
+          <td class="amount">18 695</td>
+          <td class="amount">118 261</td>
+        </tr>
+        <tr>
+          <td>Okänd 166 kvm (sannolikt 1302/1402)</td>
+          <td>~13–14</td>
+          <td>166 m²</td>
+          <td><span class="status-badge sold">Såld</span></td>
+          <td>2025-09-06</td>
+          <td class="amount">19 995</td>
+          <td class="amount">120 452</td>
+        </tr>
+      </tbody>
+    </table>
   </section>
 
 </div>
