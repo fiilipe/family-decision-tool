@@ -836,7 +836,7 @@
         <div class="explain-row"><span class="item">Driftkostnad</span><span class="val">1 978 kr</span></div>
         <div class="explain-row"><span class="item">Varmvatten</span><span class="val">796 kr</span></div>
         <div class="explain-row"><span class="item">Bredband/TV</span><span class="val">249 kr</span></div>
-        <div class="explain-row"><span class="item">Parkering</span><span class="val">1 000 kr</span></div>
+        <div class="explain-row"><span class="item">Parkering</span><span class="val">1 500 kr</span></div>
         <div class="explain-row"><span class="item">Bolåneränta (netto)</span><span class="val" id="ex-3-ranta">— kr</span></div>
         <div class="explain-row"><span class="item">Amortering 2 %</span><span class="val" id="ex-3-amort">— kr</span></div>
         <div class="explain-row total"><span class="item">Total netto</span><span class="val" id="ex-3-total">— kr</span></div>
@@ -1036,7 +1036,7 @@
         <tr id="row-park">
           <td>Parkering</td>
           <td class="amount" id="rad-park-12">— kr</td>
-          <td class="amount">1 000 kr</td>
+          <td class="amount">1 500 kr</td>
         </tr>
         <tr>
           <td>Bolåneränta (efter skatteavdrag)</td>
@@ -1530,7 +1530,7 @@ function calc() {
   const bredband = 249;
   const avgift_full = 9439;
   const avgift_12 = incitament.avgift ? 0 : avgift_full;
-  const parkering_full = 1000;
+  const parkering_full = 1500;
   const parkering_12 = incitament.park ? 0 : parkering_full;
 
   // Total per månad
