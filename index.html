@@ -486,11 +486,189 @@
   .status-badge.sold { background: #d4e5d8; color: #2d6b3a; }
   .status-badge.listad { background: #f0e0cf; color: #8c5621; }
 
+  /* SIZE COMPARE */
+  .size-compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 18px;
+  }
+  .size-col {
+    background: #faf6ee;
+    border: 1px solid #e6dcc7;
+    border-radius: 8px;
+    padding: 20px 22px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+  .size-col.target { border-top: 3px solid #2d6b3a; padding-top: 17px; }
+  .size-col-header {
+    font-family: 'Georgia', serif;
+    font-size: 1rem;
+    color: #1a1612;
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+  .size-fact {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    margin: 4px 0 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e6dcc7;
+  }
+  .size-num {
+    font-family: 'Georgia', serif;
+    font-size: 2.4rem;
+    color: #1a1612;
+    line-height: 1;
+    font-weight: 400;
+  }
+  .size-unit {
+    font-size: 0.85rem;
+    color: #6b5d4a;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .size-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 0.88rem;
+    color: #4a3f2e;
+  }
+  .size-list li {
+    padding: 5px 0;
+    border-bottom: 1px dashed #e6dcc7;
+  }
+  .size-list li:last-child { border-bottom: none; }
+  .size-list li strong { color: #1a1612; font-weight: 600; }
+
+  .size-chart-wrapper {
+    background: #faf6ee;
+    border: 1px solid #e6dcc7;
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin-bottom: 18px;
+  }
+  .size-chart-label {
+    font-size: 0.75rem;
+    color: #6b5d4a;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+  .size-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 8px 0;
+  }
+  .size-bar-name {
+    width: 60px;
+    font-size: 0.85rem;
+    color: #4a3f2e;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+  .size-bar-track {
+    flex: 1;
+    height: 28px;
+    background: #ebe3d5;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .size-bar-fill {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+  .size-bar-fill.p53 { background: #c9b88f; color: #1a1612; }
+  .size-bar-fill.new {
+    background: linear-gradient(90deg, #2d6b3a 0%, #3a8c4b 100%);
+    color: #fff;
+  }
+
+  .size-diff {
+    background: linear-gradient(135deg, #d4e5d8 0%, #c7dcce 100%);
+    border: 1px solid #91b095;
+    border-radius: 8px;
+    padding: 18px 20px;
+  }
+  .size-diff-title {
+    font-size: 0.75rem;
+    color: #1a3a22;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+  .size-diff-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+  }
+  .size-diff-item {
+    text-align: center;
+    padding: 10px 6px;
+    background: rgba(255,255,255,0.45);
+    border-radius: 6px;
+  }
+  .size-diff-num {
+    font-family: 'Georgia', serif;
+    font-size: 1.7rem;
+    color: #1a3a22;
+    font-weight: 600;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .size-diff-label {
+    font-size: 0.72rem;
+    color: #2d6b3a;
+    margin-top: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+  }
+  .size-diff-sub {
+    font-size: 0.7rem;
+    color: #1a3a22;
+    margin-top: 4px;
+    font-weight: 700;
+  }
+
+  /* RATE SENSITIVITY */
+  tr.rate-current { background: #d4e5d8; }
+  tr.rate-current td { font-weight: 600; }
+  .current-badge {
+    display: inline-block;
+    background: #2d6b3a;
+    color: #fff;
+    padding: 2px 9px;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+  td.diff-up { color: #8b3a3a; font-weight: 600; }
+  td.diff-zero { color: #6b5d4a; }
+
   @media (max-width: 768px) {
     .hero { grid-template-columns: 1fr; }
     .two-col { grid-template-columns: 1fr; }
     header h1 { font-size: 1.6rem; }
     .hero-card .value { font-size: 2rem; }
+    .size-compare { grid-template-columns: 1fr; }
+    .size-diff-grid { grid-template-columns: repeat(2, 1fr); }
+    .size-num { font-size: 2rem; }
   }
 </style>
 </head>
@@ -577,6 +755,84 @@
 
     </div>
   </div>
+
+  <!-- STORLEKSJÄMFÖRELSE -->
+  <section>
+    <h2>Vad får vi för pengarna?</h2>
+
+    <div class="size-compare">
+      <div class="size-col">
+        <div class="size-col-header">Idag — Primusgatan 53</div>
+        <div class="size-fact">
+          <span class="size-num">91,5</span><span class="size-unit">kvm</span>
+        </div>
+        <ul class="size-list">
+          <li><strong>Rum:</strong> 3,5 rok (2 sovrum + halvrum)</li>
+          <li><strong>Badrum:</strong> 1</li>
+          <li><strong>Byggår:</strong> 2005</li>
+          <li><strong>Balkong:</strong> Ja</li>
+          <li><strong>Avgift:</strong> 5 546 kr/mån</li>
+        </ul>
+      </div>
+      <div class="size-col target">
+        <div class="size-col-header">1102 — Primusgatan 6 (Vinkelhuset)</div>
+        <div class="size-fact">
+          <span class="size-num">166,1</span><span class="size-unit">kvm</span>
+        </div>
+        <ul class="size-list">
+          <li><strong>Rum:</strong> 5 rok</li>
+          <li><strong>Badrum:</strong> 2</li>
+          <li><strong>Byggår:</strong> 2025</li>
+          <li><strong>Balkonger:</strong> 15 kvm (två st)</li>
+          <li><strong>Avgift:</strong> 9 439 kr/mån</li>
+          <li><strong>Utsikt:</strong> Mälaren + Fredhällskanalen</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="size-chart-wrapper">
+      <div class="size-chart-label">Boyta — proportion</div>
+      <div class="size-bar-row">
+        <span class="size-bar-name">P53</span>
+        <div class="size-bar-track">
+          <div class="size-bar-fill p53" style="width: 55.1%;">91,5 kvm</div>
+        </div>
+      </div>
+      <div class="size-bar-row">
+        <span class="size-bar-name">1102</span>
+        <div class="size-bar-track">
+          <div class="size-bar-fill new" style="width: 100%;">166,1 kvm</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="size-diff">
+      <div class="size-diff-title">Skillnad</div>
+      <div class="size-diff-grid">
+        <div class="size-diff-item">
+          <div class="size-diff-num">+74,6</div>
+          <div class="size-diff-label">kvm yta</div>
+          <div class="size-diff-sub">+81 % större</div>
+        </div>
+        <div class="size-diff-item">
+          <div class="size-diff-num">+1,5</div>
+          <div class="size-diff-label">rum</div>
+        </div>
+        <div class="size-diff-item">
+          <div class="size-diff-num">+1</div>
+          <div class="size-diff-label">badrum</div>
+        </div>
+        <div class="size-diff-item">
+          <div class="size-diff-num">20</div>
+          <div class="size-diff-label">år nyare</div>
+        </div>
+        <div class="size-diff-item">
+          <div class="size-diff-num">+15</div>
+          <div class="size-diff-label">kvm balkong</div>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!-- TOGGLES -->
   <section>
@@ -722,6 +978,65 @@
     </table>
     <div class="footer-note">
       <strong>Tänk på:</strong> Amortering är inte en "kostnad" — det är sparande som flyttar från ditt konto till lägenheten. Vid framtida försäljning får ni tillbaka detta (plus eventuell värdetillväxt).
+    </div>
+  </section>
+
+  <!-- RÄNTEKÄNSLIGHET -->
+  <section>
+    <h2>Räntekänslighet – vad händer om räntan ändras?</h2>
+    <p class="chart-intro">Bolån på 10 MSEK är räntekänsligt. Här är hur månadskostnaden påverkas vid olika räntenivåer (allt annat lika).</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Ränta</th>
+          <th style="text-align: right;">År 1–2 (med incitament)</th>
+          <th style="text-align: right;">År 3+ (full kostnad)</th>
+          <th style="text-align: right;">Skillnad mot 2,77 %</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="rate-current">
+          <td>2,77 %<span class="current-badge">Nuvarande</span></td>
+          <td class="amount">20 509 kr</td>
+          <td class="amount">47 615 kr</td>
+          <td class="amount diff-zero">±0 kr</td>
+        </tr>
+        <tr>
+          <td>3,5 %</td>
+          <td class="amount">25 315 kr</td>
+          <td class="amount">52 420 kr</td>
+          <td class="amount diff-up">+4 806 kr</td>
+        </tr>
+        <tr>
+          <td>4,0 %</td>
+          <td class="amount">28 606 kr</td>
+          <td class="amount">55 712 kr</td>
+          <td class="amount diff-up">+8 098 kr</td>
+        </tr>
+        <tr>
+          <td>4,5 %</td>
+          <td class="amount">31 898 kr</td>
+          <td class="amount">59 004 kr</td>
+          <td class="amount diff-up">+11 389 kr</td>
+        </tr>
+        <tr>
+          <td>5,0 %</td>
+          <td class="amount">35 190 kr</td>
+          <td class="amount">62 295 kr</td>
+          <td class="amount diff-up">+14 681 kr</td>
+        </tr>
+        <tr>
+          <td>6,0 %</td>
+          <td class="amount">41 773 kr</td>
+          <td class="amount">68 879 kr</td>
+          <td class="amount diff-up">+21 264 kr</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="footer-note">
+      Räntor är historiskt rörliga. Snittet senaste 20 åren är ~3,5 % rörlig. En stresstest vid 5 % rörlig är rimligt att räkna med när man tar långsiktigt bolån.
     </div>
   </section>
 
