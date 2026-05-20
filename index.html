@@ -719,9 +719,9 @@
       <div class="p53-control">
         <div class="p53-control-row">
           <label for="forsaljning-slider">Försäljningspris P53</label>
-          <input type="number" id="forsaljning-input" value="9200000" step="50000" min="7000000" max="10500000">
+          <input type="number" id="forsaljning-input" value="8000000" step="50000" min="7000000" max="10500000">
         </div>
-        <input type="range" id="forsaljning-slider" min="7000000" max="10500000" step="50000" value="9200000">
+        <input type="range" id="forsaljning-slider" min="7000000" max="10500000" step="50000" value="8000000">
         <div class="p53-marks">
           <span>7,0 MSEK</span>
           <span style="color: #8b3a3a;">8,0 MSEK<br><em>nöjd-nivå</em></span>
@@ -741,7 +741,7 @@
             <td class="amount">−5 362 738 kr</td>
           </tr>
           <tr>
-            <td>− Mäklararvode (~2 %)</td>
+            <td>− Mäklararvode (~1,25 %)</td>
             <td class="amount" id="p53-maklare">— kr</td>
           </tr>
           <tr>
@@ -892,7 +892,7 @@ function calc() {
   document.getElementById('ek-total').innerText = fmt(ek_total);
 
   // P53
-  const maklare = forsaljning * 0.02;
+  const maklare = forsaljning * 0.0125;
   const p53_netto = forsaljning - 5362738 - maklare;
   const p53_buffert = p53_netto - kontant;
   document.getElementById('p53-pris').innerText = fmt(forsaljning);
