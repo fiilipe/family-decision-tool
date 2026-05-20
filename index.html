@@ -776,7 +776,7 @@
   <div class="hero">
     <div class="hero-card nu">
       <div class="label">Idag (P53)</div>
-      <div class="value" id="hero-nu">25 050 kr</div>
+      <div class="value" id="hero-nu">26 250 kr</div>
       <div class="per-month">per månad netto</div>
       <div class="diff diff-neutral">Vår nuvarande nivå</div>
     </div>
@@ -807,11 +807,11 @@
       <!-- NU -->
       <div class="explain-col nu">
         <h4>Idag (P53)</h4>
-        <div class="explain-row"><span class="item">Avgift BRF</span><span class="val">5 546 kr</span></div>
+        <div class="explain-row"><span class="item">Avgift BRF + parkering</span><span class="val">6 746 kr</span></div>
         <div class="explain-row"><span class="item">Bolåneränta (netto)</span><span class="val" id="ex-nu-ranta">~9 030 kr</span></div>
         <div class="explain-row"><span class="item">Amortering</span><span class="val">9 521 kr</span></div>
         <div class="explain-row"><span class="item">Drift/övrigt</span><span class="val">~953 kr</span></div>
-        <div class="explain-row total"><span class="item">Total netto</span><span class="val" id="ex-nu-total">25 050 kr</span></div>
+        <div class="explain-row total"><span class="item">Total netto</span><span class="val" id="ex-nu-total">26 250 kr</span></div>
         <div class="explain-note">Bolån 5,36 MSEK @ 2,77 % rörlig. Amorteringen är hög p.g.a. LTV >70 %.</div>
       </div>
 
@@ -992,7 +992,7 @@
       </div>
       <div class="input-group">
         <label for="nuvarande">Nuvarande netto (kr/mån)</label>
-        <input type="number" id="nuvarande" value="25050" step="500">
+        <input type="number" id="nuvarande" value="26250" step="500">
         <div class="hint">P53 efter skatteavdrag</div>
       </div>
     </div>
@@ -1086,12 +1086,12 @@
         <div class="cf-legend-item"><span class="cf-legend-swatch" style="background:#c9a14a"></span>Parkering</div>
         <div class="cf-legend-item"><span class="cf-legend-swatch" style="background:#c97e3a"></span>Ränta (netto)</div>
         <div class="cf-legend-item"><span class="cf-legend-swatch amort"></span>Amortering = sparande (bygger eget kapital)</div>
-        <div class="cf-legend-item"><span class="cf-legend-line"></span>P53 idag (25 050 kr)</div>
+        <div class="cf-legend-item"><span class="cf-legend-line"></span>P53 idag (26 250 kr)</div>
       </div>
     </div>
 
     <div class="footer-note">
-      Notera: Det gröna lagret är amortering — det är inte en kostnad utan ett sparande som flyttar till ert eget kapital i lägenheten. Den "verkliga boendekostnaden" (avgift + ränta + drift) är bara ~30 900 kr/mån från år 3, ungefär 5 800 kr mer än P53 idag.
+      Notera: Det gröna lagret är amortering — det är inte en kostnad utan ett sparande som flyttar till ert eget kapital i lägenheten. Den "verkliga boendekostnaden" (avgift + ränta + drift + parkering) är bara ~30 900 kr/mån från år 3, ungefär 4 650 kr mer än P53 idag.
     </div>
   </section>
 
@@ -1643,6 +1643,7 @@ function renderCashflowChart() {
   const kontant = parseFloat(document.getElementById('kontant').value) || 0;
   const rate = parseFloat(document.getElementById('ranta').value) || 0;
   const amortPct = parseFloat(document.getElementById('amortpct').value) || 2;
+  const nuvarande = parseFloat(document.getElementById('nuvarande').value) || 0;
   const lanInitial = Math.max(0, pris - kontant);
 
   const FAST = 1978 + 796 + 249;
@@ -1675,7 +1676,7 @@ function renderCashflowChart() {
   }
   cashflowData = years;
 
-  const maxVal = Math.max.apply(null, years.map(d => d.total).concat([25050]));
+  const maxVal = Math.max.apply(null, years.map(d => d.total).concat([nuvarande]));
   let yMax = Math.ceil(maxVal * 1.05 / 10000) * 10000;
   if (yMax < 50000) yMax = 50000;
   const tickStep = yMax > 60000 ? 20000 : 10000;
@@ -1703,9 +1704,9 @@ function renderCashflowChart() {
     svg += '<text x="' + (x0 - 8) + '" y="' + (yy + 4) + '" text-anchor="end" font-family="Helvetica Neue, Arial, sans-serif" font-size="11" fill="#8a7d65">' + Math.round(v/1000) + 'k</text>';
   }
 
-  const refY = yScale(25050);
+  const refY = yScale(nuvarande);
   svg += '<line x1="' + x0 + '" y1="' + refY + '" x2="' + (x0 + cW) + '" y2="' + refY + '" stroke="#2196f3" stroke-dasharray="5 4" stroke-width="2"/>';
-  svg += '<text x="' + (x0 + cW - 6) + '" y="' + (refY - 6) + '" text-anchor="end" font-family="Helvetica Neue, Arial, sans-serif" font-size="11" fill="#2196f3" font-weight="600">P53 idag: 25 050 kr</text>';
+  svg += '<text x="' + (x0 + cW - 6) + '" y="' + (refY - 6) + '" text-anchor="end" font-family="Helvetica Neue, Arial, sans-serif" font-size="11" fill="#2196f3" font-weight="600">P53 idag: ' + fmt(nuvarande) + '</text>';
 
   years.forEach((d, i) => {
     const bx = x0 + i * slotW + barOff;
